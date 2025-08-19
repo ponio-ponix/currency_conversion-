@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Currency Terminal</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      font-family: "Courier New", Courier, monospace;
+      padding: 20px;
+    }
+
+    .terminal {
+      border: 1px solid #555;
+      border-radius: 5px;
+      padding: 20px;
+      background-color: #000;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .output {
+      white-space: pre-wrap;
+      background-color: #111;
+      padding: 10px;
+      border: 1px solid #444;
+      margin-top: 20px;
+      min-height: 200px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 3px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <form id="terminalForm">
+      <label for="commandInput">> コマンドを入力してください:</label>
+      <input type="text" id="commandInput" autocomplete="off" />
+    </form>
+
+    <div id="output" class="output">
+      [System] コマンドの出力がここに表示されます...
+    </div>
+  </div>
+<!-- 
+  <script src="CurrencyConvertApp.js"></script> -->
+  <script src="main.js"></script>
+
+
+</body>
+</html>
