@@ -1,42 +1,59 @@
-const test = {
-    prop: 42,
-    func: function () {
-      return this.prop;
-    },
-  };
-  
-  console.log(test.func());
-  // Expected output: 42
+// ①グローバル関数呼び出し：f() → 非strictでglobalThis、strictでundefined
 
 
-  function getThis() {
-    return this;
-  }
-  
-  const obj1 = { name: "obj1" };
-  const obj2 = { name: "obj2" };
-  
-  obj1.getThis = getThis;
-  obj2.getThis = getThis;
-  
-  console.log(obj1.getThis()); // { name: 'obj1', getThis: [Function: getThis] }
-  console.log(obj2.getThis()); // { name: 'obj2', getThis: [Function: getThis] }
+function getThis() {
+  return this;
+}
 
-  const obj3 = {
-    __proto__: obj1,
-    name: "obj3",
-  };
-  
-  console.log(obj3.getThis()); // { name: 'obj3' }
+function getThisStrict() {
+  'use strict';
+  return this;
+}
 
-  const obj4 = {
-    name: "obj4",
-    getThis() {
-      return this;
-    },
-  };
-  
-const obj5 = { name: "obj5" };
+const obj1 = { name: "obj1" };
+const obj2 = { name: "obj2" };
 
-obj5.getThis = obj4.getThis;
-console.log(obj5.getThis()); // { name: 'obj5', getThis: [Function: getThis] }
+obj1.getThis = getThis;
+obj2.getThis = getThis;
+
+// ②メソッド基本呼び出し：obj.m() → this === obj
+
+console.log(obj1.getThis()); // { name: 'obj1', getThis: [Function: getThis] }
+console.log(obj2.getThis()); // { name: 'obj2', getThis: [Function: getThis] }
+
+let c = obj1.getThis;
+// グローバルオブジェクトを作るためにはlet c = obj1;だとNG。これだとobj1の参照となる。
+console.log(c()); //この出力がglobalthis(nodeだといっぱいなんかでる)
+
+// --- strict 実験 ---
+obj1.getThis = getThisStrict;
+console.log("obj1.getThis() (strict) →", obj1.getThis()); // { name: 'obj1', getThis: [Function] }
+
+let cStrict = obj1.getThis;
+console.log("detached cStrict() (strict) →", cStrict());  // undefined
+
+
+// 明示指定：f.call(x) / f.apply(x) / f.bind(x) → this === x
+
+// コンストラクタ：new C() → 新インスタンス
+
+// ⑤アロー関数：自分のthisを持たず、外側をキャプチャ（bind無効）
+
+const obj = {
+  getThisGetter() {
+    const getter = () => this;
+    return getter;
+  },
+};
+
+const fn = obj.getThisGetter();
+console.log(fn() === obj); // true
+
+const fn2 = obj.getThisGetter;
+console.log(fn2()() === globalThis); // true in non-strict mode
+
+
+
+  
+
+//   const obj3 
