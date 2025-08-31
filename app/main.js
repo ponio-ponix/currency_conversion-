@@ -90,10 +90,10 @@ class CurrencyConvertApp {
 
   parsedArrayValidator(tokens){
 
-      let validatorResponse = universalValidator(tokens);
+      let validatorResponse = this.universalValidator(tokens);
       if(!validatorResponse["isValid"]) return validatorResponse;
 
-      validatorResponse = commandArgumentsValidator(tokens);
+      validatorResponse = this.commandArgumentsValidator(tokens);
       if(!validatorResponse["isValid"]) return validatorResponse;
 
       return{'isValid': true,'errorMessage':''}
@@ -138,7 +138,7 @@ class CurrencyConvertApp {
           //２番目の通貨がNG
       //[1][3]はshowDenominationsである必要がある
 
-      else if(denominationToJPY[index_two] != -1 && denominationToJPY[index_four] != -1 && parsedCLIArray){
+      else if(this.denominationToJPY[index_two] != -1 && this.denominationToJPY[index_four] != -1 && parsedCLIArray){
           console.log("denominationToJPY[index_two]あります");
           return {'isValid': true, 'errorMessage': 'denominationToJPY[index_two]あります'}
 
@@ -162,7 +162,7 @@ class CurrencyConvertApp {
       const tokens = input.split(" ");
       console.log("入力トークン:", tokens);
 
-      let validatorResponse = parsedArrayValidator(tokens);
+      let validatorResponse = this.parsedArrayValidator(tokens);
 
       if(validatorResponse['isValid'] == false){ 
           appendResultParagraph(CLIOutputDiv, false, validatorResponse['errorMessage']);
@@ -200,16 +200,14 @@ class CurrencyConvertApp {
       //CurrencyConvert Rupee 100 Dollar
       //IndiaとかはNG、単位ではなくロケールだから。
       
-      else if(tokens[0] === "CurrencyConvert" && denominationToJPY[tokens[1]]&& denominationToJPY[tokens[3]]){    
+      else if(tokens[0] === "CurrencyConvert" && this.denominationToJPY[tokens[1]]&& this.denominationToJPY[tokens[3]]){    
 
           const sourceDenomination = tokens[1];
           const sourceAmount = tokens[2];
           const destDenomination = tokens[3];
           
         
-          convert(sourceDenomination, sourceAmount, destDenomination);
-
-
+        this.convert(sourceDenomination, sourceAmount, destDenomination);
       }
 
   }
@@ -272,8 +270,8 @@ class CurrencyConvertApp {
 
 
   convert(sourceDenomination, sourceAmount, destinationDenomination){
-      const sourceJPYRate = denominationToJPY[sourceDenomination];
-      const destJPYRate   = denominationToJPY[destinationDenomination];
+      const sourceJPYRate = this.denominationToJPY[sourceDenomination];
+      const destJPYRate   = this.denominationToJPY[destinationDenomination];
 
       if (!sourceJPYRate || !destJPYRate) {
           appendResultParagraph(CLIOutputDiv, false, "不正な通貨単位が指定されました。");
@@ -284,7 +282,7 @@ class CurrencyConvertApp {
       const convertedAmount = amountInJPY / destJPYRate;
 
       const message = `${sourceAmount} ${sourceDenomination} = ${convertedAmount.toFixed(2)} ${destinationDenomination}`;
-      appendResultParagraph(CLIOutputDiv, true, message);
+      this.appendResultParagraph(this.CLIOutputDiv, true, message);
   }
 
 }

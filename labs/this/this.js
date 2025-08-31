@@ -56,4 +56,17 @@ console.log(fn2()() === globalThis); // true in non-strict mode
 
   
 
-//   const obj3 
+//JSのthisがプリミティブ値（数値や文字列など）とどう関わるか
+
+
+function getThisStrict() {
+  "use strict"; // 厳格モードに入る
+  return this;
+}
+
+// デモ専用のものです。組み込みのプロトタイプを変更しないでください。
+Number.prototype.getThisStrict = getThisStrict;
+console.log(typeof (1).getThisStrict()); // "number"
+
+//これはまず非strictモードなので勝手にボクシングされると。
+//だからオブジェクト型になるのでthisとして捉えられる、そしてプロトタイプにそのオブジェクト型となったメソッドが登録される。
